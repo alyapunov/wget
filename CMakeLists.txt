@@ -21,8 +21,11 @@ INCLUDE_DIRECTORIES(.)
 
 SET(HTTP_RESP_FILES HttpResponseParser.cpp HttpResponseParser.hpp)
 SET(UTILS_FILES MakeArray.hpp IOVec.hpp)
+SET(SOCK_BASE_FILES SocketBase.hpp SocketBase.cpp NetException.hpp NetException.cpp)
+SET(SOCK_PLAIN_FILES PlainSocket.hpp PlainSocket.cpp)
+SET(SOCK_FILES ${SOCK_PLAIN_FILES} ${SOCK_BASE_FILES} ${UTILS_FILES})
 
-SET(SOURCE_FILES main.cpp ${HTTP_RESP_FILES})
+SET(SOURCE_FILES main.cpp ${HTTP_RESP_FILES} ${SOCK_FILES})
 
 ADD_EXECUTABLE(wget ${SOURCE_FILES})
 
@@ -30,8 +33,11 @@ ADD_EXECUTABLE(HttpResponseParserUnitTest HttpResponseParserUnitTest.cpp ${HTTP_
 ADD_EXECUTABLE(HttpResponseParserPerfTest HttpResponseParserPerfTest.cpp ${HTTP_RESP_FILES})
 ADD_EXECUTABLE(MakeArrayUnitTest MakeArrayUnitTest.cpp ${UTILS_FILES})
 ADD_EXECUTABLE(IOVecUnitTest IOVecUnitTest.cpp ${UTILS_FILES})
+ADD_EXECUTABLE(PlainSocketUnitTest PlainSocketUnitTest.cpp ${SOCK_FILES})
+TARGET_LINK_LIBRARIES(PlainSocketUnitTest pthread)
 
 ENABLE_TESTING()
 ADD_TEST(NAME HttpResponseParserUnitTest COMMAND HttpResponseParserUnitTest)
 ADD_TEST(NAME MakeArrayUnitTest COMMAND MakeArrayUnitTest)
 ADD_TEST(NAME IOVecUnitTest COMMAND IOVecUnitTest)
+ADD_TEST(NAME PlainSocketUnitTest COMMAND PlainSocketUnitTest)
